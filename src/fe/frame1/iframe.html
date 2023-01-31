@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="./frame.js"></script>
+  <title>Iframe</title>
+</head>
+<body>
+  <h4>Frame's content</h4>
+
+  <img src="../test_image.png" alt="test image">
+
+  <fieldset>
+    <legend>Fetch data from the Host-2</legend>
+    <button
+      id="btn_external"
+      type="button"
+    >
+      External script
+    </button>
+
+      <button
+      id="btn_inline"
+      type="button"
+    >
+      Inline script
+    </button>
+
+    <script nonce="inlineScript">
+      const btnInline = document.querySelector('#btn_inline');
+      btnInline.onclick = () => {
+          console.log('Inline script is trying to fetch data from http://localhost:2000');
+          fetch("http://localhost:2000")
+            .then(req => req.text())
+            .then(data => console.log('Fetched data:', data))
+            .catch(() => console.log('Fetch error'));
+          };
+    </script>
+  </fieldset>
+
+  <a href="http://localhost:2000">http://localhost:2000</a>
+</body>
+</html>

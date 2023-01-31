@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'self'; script-src 'self' 'nonce-inlineScript' http://localhost:2000; frame-src 'self' http://localhost:2000; connect-src http://localhost:2000;"
+    > -->
+    <!-- <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; img-src 'none'; script-src 'self' 'nonce-inlineScript' http://localhost:2000;"
+    > -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security fundamentals</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="main.js"></script>
+  </head>
+
+  <body>
+    <h1>Security fundamentals test stand</h1>
+
+    <article class="main">
+      <p>
+        <strong>Host-1</strong>: http://localhost:8080
+        <br>
+        <strong>Host-2</strong>: http://localhost:2000
+      </p>
+      <p>
+        <strong>Main page</strong> is hosted at the <strong>Host-1</strong>
+      </p>
+
+      <img src="http://localhost:8080/test_image.png" alt="image at the Host-1" title="image at the Host-1">
+      <img src="http://localhost:2000/test_image.png" alt="image at the Host-2" title="image at the Host-2">
+
+      <fieldset class="buttons">
+        <legend>Fetch data from the Host-2</legend>
+        <button
+          id="btn_external"
+          type="button"
+        >
+          External script
+        </button>
+
+          <button
+          id="btn_inline"
+          type="button"
+        >
+          Inline script
+        </button>
+
+        <script nonce="inlineScript">
+          const btnInline = document.querySelector('#btn_inline');
+          btnInline.onclick = () => {
+              console.log('Inline script is trying to fetch data from http://localhost:2000');
+              fetch("http://localhost:2000")
+                .then(req => req.text())
+                .then(data => console.log('Fetched data:', data))
+                .catch(() => console.log('Fetch error'));
+              };
+        </script>
+      </fieldset>
+    </article>
+
+    <article class="iframe">
+      <h2>Iframe #1</h2>
+      <p>
+        <strong>Outer frame</strong> is hosted at the <strong>Host-1</strong>
+        <br>
+        <strong>Outer frame</strong> is sandboxed
+        <br>
+        <strong>Inner frame</strong>strong> is hosted at the <strong>Host-2</strong>
+        <br>
+        <strong>Inner frame</strong>strong> is <strong>not</strong> sandboxed
+      </p>
+
+      <fieldset class="buttons">
+        <legend>Iframe sandboxing</legend>
+          <button
+          id="btn_reload_1"
+          type="button"
+        >
+          Reload iframe
+        </button>
+
+        <button
+          id="btn_remove_1"
+          type="button"
+        >
+          Remove sandbox attribute
+        </button>
+
+        <button
+          id="btn_set_1"
+          type="button"
+        >
+          Set sandbox attribute
+        </button>
+
+        <button
+          id="btn_scripts_1"
+          type="button"
+        >
+          allow-scripts On/Off
+        </button>
+
+        <button
+          id="btn_origin_1"
+          type="button"
+        >
+          allow-same-origin On/Off
+        </button>
+      </fieldset>
+
+      <iframe
+        name="iframe1"
+        id="iframe_1"
+        src="frameOuter/iframe.html"
+        title="iframe_1"
+        sandbox=""
+      ></iframe>
+    </article>
+
+    <article class="iframe">
+      <h2>Iframe #2</h2>
+      <p>
+        <strong>The frame</strong>strong> is hosted at the <strong>Host-2</strong>
+        <br>
+        <strong>The frame</strong>strong> is <strong>not</strong> sandboxed
+      </p>
+
+      <fieldset class="buttons">
+        <legend>Iframe sandboxing</legend>
+          <button
+          id="btn_reload_2"
+          type="button"
+        >
+          Reload iframe
+        </button>
+
+        <button
+          id="btn_remove_2"
+          type="button"
+        >
+          Remove sandbox attribute
+        </button>
+
+        <button
+          id="btn_set_2"
+          type="button"
+        >
+          Set sandbox attribute
+        </button>
+
+        <button
+          id="btn_scripts_2"
+          type="button"
+        >
+          allow-scripts On/Off
+        </button>
+
+        <button
+          id="btn_origin_2"
+          type="button"
+        >
+          allow-same-origin On/Off
+        </button>
+      </fieldset>
+
+      <iframe
+        name="iframe2"
+        id="iframe_2"
+        src="http://localhost:2000/iframe.html"
+        title="iframe_2"
+      ></iframe>
+    </article>
+
+    <article class="iframe">
+      <h2>Iframe #3</h2>
+      <p>
+        <strong>The frame</strong> is added dynamically
+        <br>
+      </p>
+
+      <script nonce="inlineScript">
+        const newFrame = document.createElement('iframe');
+        const htmlString = `
+          <html>
+            <head></head>
+            <body>
+              <h3>Hello!</h3>
+              <img src="http://localhost:8080/test_image.png" alt="image at the Host-1">
+            </body>
+          <html>
+        `
+        const htmlNode = document.createElement('html');
+        htmlNode.innerHTML = htmlString;
+
+        newFrame.src = 'http://localhost:8080/frameOuter/iframe.html';
+        newFrame.setAttribute('srcdoc', htmlString);
+        newFrame.srcdoc = htmlString;
+        newFrame.onload = () => {
+          newFrame.contentWindow.document.documentElement.innerHTML = htmlString;
+          newFrame.contentWindow.document.documentElement.replaceWith(htmlNode);
+        }
+
+        document.body.append(newFrame);
+      </script>
+    </article>
+  </body>
+</html>

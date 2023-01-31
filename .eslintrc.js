@@ -32,5 +32,23 @@ module.exports = {
   ],
   rules: {
     'semi': 'error',
-  }
+    'arrow-parens': ["error", "as-needed"],
+    'no-multi-spaces': "error",
+    'no-multiple-empty-lines': ["error", { "max": 1, "maxEOF": 0 }],
+    'no-trailing-spaces': "error",
+    'eol-last': ["error", "always"],
+  },
+  overrides: [
+    {
+      files: ['*.js'],
+      rules: {
+        '@typescript-eslint/no-unsafe-argument': 'off',
+        '@typescript-eslint/no-unsafe-assignment': 'off',
+        '@typescript-eslint/restrict-template-expressions': 'off',
+        '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/no-unsafe-call': 'off',
+        '@typescript-eslint/no-unsafe-member-access': 'off',
+      },
+    },
+  ]
 };
