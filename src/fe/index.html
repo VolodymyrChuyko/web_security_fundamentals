@@ -7,7 +7,7 @@
     > -->
     <!-- <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'none'; script-src 'self' 'nonce-inlineScript' http://localhost:2000;"
+      content="default-src 'self'; img-src 'none'; script-src 'self' 'nonce-inlineScript' http://localhost:2000; frame-src 'self' data:;"
     > -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -193,18 +193,31 @@
             </body>
           <html>
         `
+        const encoded = encodeURIComponent(htmlString);
         const htmlNode = document.createElement('html');
         htmlNode.innerHTML = htmlString;
 
-        newFrame.src = 'http://localhost:8080/frameOuter/iframe.html';
-        newFrame.setAttribute('srcdoc', htmlString);
-        newFrame.srcdoc = htmlString;
+        // dynamically loading iframe content
+        //---------------------------------------------------------------------------
+        // 1
+        newFrame.src = 'http://localhost:8080/frameOuter/iframe.html'; // does NOT inherit the parent's CSP; is enabled by "frame-src 'self'" CSP directive;
+        // 2
+        newFrame.src = 'data:text/html,' + encoded; // inherits the parent's CSP; is enabled by "frame-src data:" CSP directive (uses data: protocol);
+        // 3
+        newFrame.setAttribute('srcdoc', htmlString); // inherits the parent's CSP
+        newFrame.srcdoc = htmlString; // technically the same as previous
+
         newFrame.onload = () => {
-          newFrame.contentWindow.document.documentElement.innerHTML = htmlString;
-          newFrame.contentWindow.document.documentElement.replaceWith(htmlNode);
+          // 4
+          newFrame.contentWindow.document.documentElement.innerHTML = htmlString; // inherits the parent's CSP
+          // 5
+          newFrame.contentWindow.document.documentElement.replaceWith(htmlNode); // inherits the parent's CSP
         }
 
         document.body.append(newFrame);
+        // 6
+        newFrame.contentWindow.location = 'http://localhost:8080/frameOuter/iframe.html'; // does NOT inherit the parent's CSP; is enabled by "frame-src 'self'" CSP directive;
+
       </script>
     </article>
   </body>
