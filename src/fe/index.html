@@ -7,7 +7,7 @@
     > -->
     <!-- <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'none'; script-src 'self' 'nonce-inlineScript' http://localhost:2000; frame-src 'self' data:;"
+      content="default-src 'self'; img-src 'none'; script-src 'unsafe-inline' 'self' http://localhost:2000; frame-src 'self' data:;"
     > -->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -191,9 +191,7 @@
               <h3>Hello!</h3>
               <img src="http://localhost:8080/test_image.png" alt="image at the Host-1">
             </body>
-          <html>
-        `
-        const encoded = encodeURIComponent(htmlString);
+          <html>`;
         const htmlNode = document.createElement('html');
         htmlNode.innerHTML = htmlString;
 
@@ -202,7 +200,9 @@
         // 1
         newFrame.src = 'http://localhost:8080/frameOuter/iframe.html'; // does NOT inherit the parent's CSP; is enabled by "frame-src 'self'" CSP directive;
         // 2
-        newFrame.src = 'data:text/html,' + encoded; // inherits the parent's CSP; is enabled by "frame-src data:" CSP directive (uses data: protocol);
+        newFrame.src = 'javascript:document.write(`' + htmlString + '`); document.close();'; // inherits the parent's CSP; is enabled by "script-src 'unsafe-inline'" CSP directive;
+        newFrame.src = 'data:text/html,' + encodeURIComponent(htmlString); // inherits the parent's CSP; is enabled by "frame-src data:" CSP directive (uses data: protocol);
+        newFrame.src = 'data:text/html;base64,' + btoa(htmlString); // technically the same as previous, but uses base64 encoding
         // 3
         newFrame.setAttribute('srcdoc', htmlString); // inherits the parent's CSP
         newFrame.srcdoc = htmlString; // technically the same as previous
@@ -217,7 +217,6 @@
         document.body.append(newFrame);
         // 6
         newFrame.contentWindow.location = 'http://localhost:8080/frameOuter/iframe.html'; // does NOT inherit the parent's CSP; is enabled by "frame-src 'self'" CSP directive;
-
       </script>
     </article>
   </body>
