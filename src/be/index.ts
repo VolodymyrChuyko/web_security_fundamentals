@@ -35,7 +35,7 @@ app.listen(PORT, () => {
 anotherApp.use(cors(anotherAppCorsOptions));
 anotherApp.use(useCSP(anotherAppCSP));
 anotherApp.use(express.static('./src/fe/frame1'));
-anotherApp.get('/', (req, res) => {res.send('Hello!');});
+anotherApp.get('/', (req, res) => {res.send('Fetching succeed!');});
 anotherApp.listen(anotherPORT);
 
 function useCSP(CSP: string) {

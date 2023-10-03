@@ -1,35 +1,27 @@
-# env_ts_node
+# WEB SECURITY FUNDAMENTALS
 
-## Installed:
-   - TypeScript
-   - NodeJS
-   - nodemon
-   - ESlint
-   - Husky
-   - Lint-staged
+Use
+   - `npm run lint` to run ESlint check after code change
 
-## Avaliable scripts
-   - `npm run dev` - start develop mode (note that this option works only if TS compiler option "module" is set to "CommonJS"). In the develop mode source code restarts every time it was changed
-   - `npm run build` - generate JS code from source TS files
-   - `npm start` - build and start generated JS code
-   - `npm run lint` - run ESlint code check
+## How to use the stand
 
-## Installing Jest for testing
+### To start
+Use
+   - `npm run stand` to start the stand in develop mode
 
-To install **Jest** follow the instructions:
+or
+   - `npm start` to build and start the stand
 
-   1. `npm install --save-dev jest ts-jest` - install Jest library.
+This will start two servers:
+   - the first server (`Host-1`) is for hosting the page and iframes on port `8080`
+   - the second server (`Host-2`) is for hosting an iframe on port `2000`
 
-   2. `npx ts-jest config:init` - create jest configure file.
+Open the page in browser and open Dev Tools to see console messages.
 
-   3. You may need to add the `jest.config.js` file to the `include` array in `tsconfig.json` for proper **Eslint** working.
-
-   4. Use `npx jest` to fire tests or add the line: `"test": "npx jest",` to the `scripts` object of the `package.json` file to be able to fire tests using `npm test` command.
-
-   5. It is recommended to install the Jest extension for convenience.
-
-See more by following:
-
-[Jest: getting started using TypeScript](https://jestjs.io/docs/getting-started#using-typescript)
-
-[ts-jest: installation](https://kulshekhar.github.io/ts-jest/docs/getting-started/installation/#jest-config-file)
+### Play with it
+   - Check if the images hosted on `Host-1` and `Host-2` are displayed.
+   - Try fetching data from the `Host-2` using external and inline scripts (use buttons on the page) and see the result in the console.
+   - Play with iframe sandboxing parameters using buttons on the page.
+   - Check if the images are still displayed and if data fetching works.
+   - Go into the code and change the CSP parameter manually. You can edit the CSP parameters in the server code in src/be/index.ts and in HTML code in `<meta http-equiv="Content-Security-Policy">` tags.
+   - Find Iframe #3 in the HTML code. Try different approaches for loading iframe content dynamically. Check which CSP restrictions are applied for each approach.
