@@ -9,7 +9,7 @@ const appCSP = [
   "default-src 'self';",
   "img-src 'self' http://localhost:2000;",
   "script-src 'self' 'nonce-inlineScript' http://localhost:2000;",
-  "frame-src 'self' data: http://localhost:2000;",
+  "frame-src 'self' data: http://localhost:2000 https://example.com;",
   "connect-src http://localhost:2000;",
 ].join(' ');
 const anotherAppCSP = [

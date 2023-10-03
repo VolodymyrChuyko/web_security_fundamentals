@@ -25,3 +25,4 @@ Open the page in browser and open Dev Tools to see console messages.
    - Check if the images are still displayed and if data fetching works.
    - Go into the code and change the CSP parameter manually. You can edit the CSP parameters in the server code in src/be/index.ts and in HTML code in `<meta http-equiv="Content-Security-Policy">` tags.
    - Find Iframe #3 in the HTML code. Try different approaches for loading iframe content dynamically. Check which CSP restrictions are applied for each approach.
+   - Try to wrap any site into iframe using Iframe#4 with input field.

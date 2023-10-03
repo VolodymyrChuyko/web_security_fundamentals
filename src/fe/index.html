@@ -219,5 +219,73 @@
         newFrame.contentWindow.location = 'http://localhost:8080/frameOuter/iframe.html'; // does NOT inherit the parent's CSP; is enabled by "frame-src 'self'" CSP directive;
       </script>
     </article>
+
+    <article class="iframe">
+      <h2>Iframe #4</h2>
+      <p>
+        <strong>The frame</strong> is hosted at the 
+        <input
+          id="inpt_src_4"
+          type="text"
+          value="https://example.com"
+        >
+        <br>
+        <strong>The frame</strong> is <strong>not</strong> sandboxed
+      </p>
+
+      <fieldset class="buttons">
+        <legend>Iframe sandboxing</legend>
+          <button
+          id="btn_load_4"
+          type="button"
+        >
+          Load iframe
+        </button>
+
+        <button
+          id="btn_remove_4"
+          type="button"
+        >
+          Remove sandbox attribute
+        </button>
+
+        <button
+          id="btn_set_4"
+          type="button"
+        >
+          Set sandbox attribute
+        </button>
+
+        <button
+          id="btn_scripts_4"
+          type="button"
+        >
+          allow-scripts On/Off
+        </button>
+
+        <button
+          id="btn_origin_4"
+          type="button"
+        >
+          allow-same-origin On/Off
+        </button>
+      </fieldset>
+<!--
+      <iframe
+        name="iframe4"
+        id="iframe_4"
+        src="http://localhost:2000/iframe.html"
+        title="iframe_4"
+      ></iframe> -->
+
+      <script nonce="inlineScript">
+        const input = document.querySelector('#inpt_src_4');
+        const iframe4 = document.createElement('iframe');
+        iframe4.setAttribute('id', 'iframe_4')
+        iframe4.setAttribute('name', 'iframe4')
+        iframe4.src = input.value;
+        document.body.append(iframe4);
+      </script>
+    </article>
   </body>
 </html>
